@@ -1,0 +1,16 @@
+/* Reset básico para elementos comuns que podem afetar a altura total. */
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Isso evita rolagem indesejada se houver. */
+  }
+  
+  /* Definir o estilo para o container do mapa para que ele ocupe toda a altura e largura disponíveis. */
+  .map-container {
+    width: 100%;
+    height: 100%;
+    position: relative; /* Para possíveis sobreposições, como marcadores ou controles. */
+  }
+  
