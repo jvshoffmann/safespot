@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
 import './Map.css'
 import TopMenu from './TopMenu.js';
+import EstablishmentDetails from './EstablishmentDetails';
+import StarRating from './StarRating';
+import './EstablishmentDetails.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 
 
 class MapContainer extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+          selectedPlaceDetails: null,
+          rating: 0
+        };
+      }
   mapRef = React.createRef();
 
   componentDidMount() {
@@ -28,27 +41,11 @@ class MapContainer extends Component {
     }
   }
 
-  /* = () => {
-    const query = document.getElementById('place-search').value;
+handleRatingSelected = (rating) => {
+    this.setState({ rating });
+};
 
-    if (query) {
-        this.placesService.textSearch({ query }, (results, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                for (let i = 0; i < results.length; i++) {
-                    new window.google.maps.Marker({
-                        map: this.map,
-                        position: results[i].geometry.location,
-                    });
-                }
 
-                // Ajuste o zoom e o centro do mapa para o primeiro resultado
-                if (results[0]) {
-                    this.map.setCenter(results[0].geometry.location);
-                }
-            }
-        });
-    }
-};*/
 
 searchPlaces = () => {
     const query = document.getElementById('place-search').value;
@@ -75,6 +72,7 @@ displayResults = (predictions, status) => {
     });
 };
 
+
 selectPlace = (placeId) => {
     const placesService = new window.google.maps.places.PlacesService(this.map);
     placesService.getDetails({ placeId }, (result, status) => {
@@ -84,9 +82,12 @@ selectPlace = (placeId) => {
                 map: this.map,
                 position: result.geometry.location
             });
+
+            this.setState({ selectedPlaceDetails: result });
         }
     });
 };
+
 
 
 
@@ -117,9 +118,18 @@ initMap() {
   }
 }
 
+handleRatingSelected(rating) {
+    
+    this.setState({ currentRating: rating });
+}
+
+
   ''
   render() {
+  
+    
     return (
+        
         <div className="map-page-container">
             <TopMenu />
             <div className="autocomplete-container">
@@ -131,8 +141,18 @@ initMap() {
               />
               <div id="autocomplete-results" className="autocomplete-results"></div>
           </div>
+
+          {this.state.selectedPlaceDetails && (
+           <EstablishmentDetails 
+                place={this.state.selectedPlaceDetails}
+                currentRating={this.state.currentRating}
+                onRatingSelected={(rating) => this.handleRatingSelected(rating)}
+            />
+                
+)}
             <div ref={this.mapRef} className="map-container" />
         </div>
+        
     );
 }
 
