@@ -74,19 +74,23 @@ displayResults = (predictions, status) => {
 
 
 selectPlace = (placeId) => {
-    const placesService = new window.google.maps.places.PlacesService(this.map);
-    placesService.getDetails({ placeId }, (result, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-            this.map.setCenter(result.geometry.location);
-            new window.google.maps.Marker({
-                map: this.map,
-                position: result.geometry.location
-            });
+  const placesService = new window.google.maps.places.PlacesService(this.map);
+  placesService.getDetails({ placeId }, (result, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          this.map.setCenter(result.geometry.location);
+          new window.google.maps.Marker({
+              map: this.map,
+              position: result.geometry.location
+          });
 
-            this.setState({ selectedPlaceDetails: result });
-        }
-    });
+          this.setState({ selectedPlaceDetails: result });
+      }
+  });
+
+  // Esconde o contêiner de resultados após um local ter sido selecionado
+  document.getElementById('autocomplete-results').style.display = 'none';
 };
+
 
 
 
@@ -148,6 +152,10 @@ handleRatingSelected(rating) {
                 currentRating={this.state.currentRating}
                 onRatingSelected={(rating) => this.handleRatingSelected(rating)}
             />
+
+
+
+            
                 
 )}
             <div ref={this.mapRef} className="map-container" />
