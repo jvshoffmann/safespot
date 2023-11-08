@@ -81,8 +81,9 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
                     console.error("Erro ao obter ID do estabelecimento:", idData.message);
                     return;
                 }
-                console.log(localStorage.getItem('authToken'))
+                console.log(idData.id);
                 const establishmentId = idData.id;
+                
                 
                 // Agora, envie a avaliação
                 const response = await fetch('http://localhost:3000/api/reviews', {
@@ -94,7 +95,8 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
                     },
     
                     body: JSON.stringify({
-                        maps_id: establishmentId,
+                        //maps_id: establishmentId,
+                        establishment_id:establishmentId,
                         rating: rating,
                         comment: comment
                     })

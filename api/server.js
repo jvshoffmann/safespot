@@ -98,7 +98,32 @@ app.get('/api/establishment/:maps_id', async (req, res) => {
 
 
 // Rota para buscar avaliações de um estabelecimento
+
 app.get('/api/reviews/:maps_id', async (req, res) => {
+  try {
+      const { maps_id } = req.params;
+
+      // Primeiro, obtenha o establishment_id usando o maps_id
+      const establishmentResult = await client.query('SELECT id FROM establishments WHERE maps_id = $1', [maps_id]);
+
+      if (establishmentResult.rows.length === 0) {
+          // Se não encontrarmos um estabelecimento, retorne um erro ou uma resposta vazia
+          return res.status(404).json({ success: false, message: 'Estabelecimento não encontrado.' });
+      }
+
+      const establishmentId = establishmentResult.rows[0].id;
+
+      // Agora, com o establishment_id, busque as avaliações
+      const reviewsResult = await client.query('SELECT * FROM reviews WHERE establishment_id = $1', [establishmentId]);
+      
+      res.json({ success: true, reviews: reviewsResult.rows });
+  } catch (error) {
+      console.error('Erro ao buscar avaliações:', error);
+      res.status(500).json({ success: false, message: 'Erro ao buscar avaliações.' });
+  }
+});
+
+/*app.get('/api/reviews/:maps_id', async (req, res) => {
   try {
       const { maps_id } = req.params;
       const result = await client.query(`
@@ -113,29 +138,20 @@ app.get('/api/reviews/:maps_id', async (req, res) => {
       console.error('Erro ao buscar avaliações:', error);
       res.status(500).json({ success: false, message: 'Erro ao buscar avaliações.' });
   }
-});
+});*/
 
 // Rota para enviar avaliação
+
 app.post('/api/reviews', verifyToken, async (req, res) => {
   try {
-      const { maps_id, rating, comment } = req.body;
+      const { establishment_id, rating, comment } = req.body; // Alterado para usar establishment_id
       const userId = req.userId;
 
-      // Primeiro, obtenha o establishment_id usando o maps_id
-      const result = await client.query('SELECT id FROM establishments WHERE maps_id = $1', [maps_id]);
-
-      let establishmentId;
-
-      /*if (result.rows.length === 0) {
-          
-          const insertRes = await client.query('INSERT INTO establishments (maps_id, name, address) VALUES ($1, $2, $3) RETURNING id', [maps_id, 'UNKNOWN NAME', 'UNKNOWN ADDRESS']);
-          establishmentId = insertRes.rows[0].id;
-      } else {
-          establishmentId = result.rows[0].id;
-      }*/
-
-      // Agora, insira a revisão usando o establishment_id
-      await client.query('INSERT INTO reviews (user_id, establishment_id, rating, comment) VALUES ($1, $2, $3, $4)', [userId, establishmentId, rating, comment]);
+      // Insira a avaliação diretamente, uma vez que já temos o establishment_id
+      await client.query(
+        'INSERT INTO reviews (user_id, establishment_id, rating, comment) VALUES ($1, $2, $3, $4)',
+        [userId, establishment_id, rating, comment]
+      );
 
       res.json({ success: true });
   } catch (error) {
@@ -144,6 +160,30 @@ app.post('/api/reviews', verifyToken, async (req, res) => {
   }
 });
 
+/*app.post('/api/reviews', verifyToken, async (req, res) => {
+  try {
+      const { maps_id, rating, comment } = req.body;
+      const userId = req.userId;
+
+
+      // Primeiro, obtenha o establishment_id usando o maps_id
+      const establishmentRes = await client.query('SELECT id FROM establishments WHERE maps_id = $1', [maps_id]);
+     
+      if (establishmentRes.rows.length === 0) {
+        return res.status(404).json({ success: false, message: 'Estabelecimento não encontrado.' });
+    }
+    const establishmentId = establishmentRes.rows[0].id
+
+      // Agora, insira usando o establishment_id
+      await client.query('INSERT INTO reviews (user_id, establishment_id, rating, comment) VALUES ($1, $2, $3, $4)', [userId, establishmentId, rating, comment]);
+
+      res.json({ success: true });
+  } catch (error) {
+      console.error('Erro ao enviar avaliação:', error);
+      res.status(500).json({ success: false, message: 'Erro ao enviar avaliação.', error: error.message });
+  }
+});
+*/
 
 app.get('/api/establishment-id/:mapsId', async (req, res) => {
   try {
