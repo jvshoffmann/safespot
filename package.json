@@ -1,51 +1,16 @@
-<<<<<<< HEAD
-
 {
-  "dependencies": {
-    "create-react-app": "^5.0.1"
-  }
-  
-=======
-{
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "dotenv": "^16.3.1",
-    "google-map-react": "^2.2.1",
-    "pg": "^8.11.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.15.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "meu-projeto",
+  "version": "1.0.0",
   "scripts": {
-    "start": "set PORT=3001 && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node API/index.js",
+    "start-client": "cd Client && npm start",
+    "build-client": "cd Client && npm run build",
+    "install-client": "cd Client && npm install",
+    "install-api": "cd API && npm install",
+    "postinstall": "npm run install-client && npm run build-client && npm run install-api"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3"
   }
->>>>>>> e4daff6b189ebd8c9376919a5b1c2755555a43d8
 }
