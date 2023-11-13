@@ -1,5 +1,5 @@
 {
-  "name": "meu-projeto",
+  "name": "client",
   "version": "1.0.0",
   "scripts": {
     "start": "node API/index.js",
@@ -8,6 +8,9 @@
     "install-client": "cd Client && npm install",
     "install-api": "cd API && npm install",
     "postinstall": "npm run install-client && npm run build-client && npm run install-api"
+  },
+  "engines": {
+    "node": "18.17.1"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
