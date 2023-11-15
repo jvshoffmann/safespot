@@ -144,7 +144,7 @@ app.get('/api/reviews/:maps_id', async (req, res) => {
 
 app.post('/api/reviews', verifyToken, async (req, res) => {
   try {
-      const { establishment_id, rating, comment } = req.body; // Alterado para usar establishment_id
+      const { establishment_id, rating, comment } = req.body;
       const userId = req.userId;
 
       // Insira a avaliação diretamente, uma vez que já temos o establishment_id

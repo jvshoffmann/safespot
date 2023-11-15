@@ -15,7 +15,7 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
         //console.log(place);
         const ensureEstablishmentExists = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/ensure-establishment`, {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/ensure-establishment`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
     
         const fetchReviews = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/reviews/${place.place_id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/reviews/${place.place_id}`);
                 const data = await response.json();
                 
                 if (data.success) {
@@ -72,7 +72,7 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
         if (rating > 0 && comment.trim()) {
             try {
                 // Primeiro, obtenha o id do estabelecimento usando o maps_id
-                const idResponse = await fetch(`http://localhost:3000/api/establishment-id/${place.place_id}`);
+                const idResponse = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/establishment-id/${place.place_id}`);
             
                 const idData = await idResponse.json();
                // console.log(idResponse)
@@ -86,7 +86,7 @@ function EstablishmentDetails({  place, currentRating, onRatingSelected  }) {
                 
                 
                 // Agora, envie a avaliação
-                const response = await fetch('http://localhost:3000/api/reviews', {
+                const response = await fetch('${process.env.REACT_APP_API_BASE_URL}/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
